@@ -3,43 +3,47 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectIsAuthenticated } from "../store/auth/selectors";
 import { selectGalleries } from "../store/gallery/selectors";
 import { getGalleries } from "../store/gallery/slice";
-import GalleryRow from "../components/GalleryRow";
 import { Button, Container, ListGroup, Row } from "react-bootstrap";
 
-export default function AppGalleries() {
+export default function PaginationComponent() {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const galleries = useSelector(selectGalleries);
   const [loadedGalleries, setLoadedGalleries] = useState([]);
-  const [pageSize] = useState(10);
+  const pageSize = 10;
 
   useEffect(() => {
     dispatch(getGalleries({ page: 1, pageSize }));
   }, [dispatch, isAuthenticated, pageSize]);
 
-  function handlePagination() {
-    const nextPage = galleries.current_page + 1;
-    dispatch(getGalleries({ page: nextPage }));
-  }
   useEffect(() => {
     if (galleries.data) {
-      setLoadedGalleries(galleries.data);
+      setLoadedGalleries(galleries.data.slice(0, pageSize));
     }
-  }, [galleries.data]);
+  }, [galleries.data, isAuthenticated, pageSize]);
+
+  function handlePagination() {
+    const nextPage = galleries.current_page + 1;
+    dispatch(getGalleries({ page: nextPage, pageSize }));
+  }
+
+  useEffect(() => {
+    // Resetujemo prikazane galerije kada se promeni autentifikacija
+    setLoadedGalleries([]);
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    // Ažuriramo prikazane galerije kada se podaci sa servera promene
+    if (galleries.data && isAuthenticated) {
+      setLoadedGalleries((prevGalleries) => [
+        ...prevGalleries,
+        ...galleries.data.slice(pageSize),
+      ]);
+    }
+  }, [galleries.data, isAuthenticated, pageSize]);
 
   return (
-    <Container className="mt-4">
-      <Row className="justify-content-center">
-        <ListGroup>
-          {loadedGalleries.length ? (
-            loadedGalleries.map((gallery, index) => (
-              <GalleryRow key={gallery.id} gallery={gallery} />
-            ))
-          ) : (
-            <div>No galleries created.</div>
-          )}
-        </ListGroup>
-      </Row>
+    <div>
       {galleries.current_page < galleries.last_page && (
         <Button
           variant="primary"
@@ -49,6 +53,6 @@ export default function AppGalleries() {
           Load More
         </Button>
       )}
-    </Container>
+    </div>
   );
 }
