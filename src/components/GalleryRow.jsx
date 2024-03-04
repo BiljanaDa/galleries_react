@@ -34,9 +34,13 @@ export default function GalleryRow({ gallery }) {
       <Card.Footer>
         <small className="text-muted">
           By:{" "}
-          <Link to={`/authors/${gallery.user.id}`}>
-            {gallery.user.first_name} {gallery.user.last_name}
-          </Link>
+          {gallery.user ? (
+            <Link to={`/authors/${gallery.user.id}`}>
+              {gallery.user.first_name} {gallery.user.last_name}
+            </Link>
+          ) : (
+            "Unknown User"
+          )}
         </small>
       </Card.Footer>
     </Card>

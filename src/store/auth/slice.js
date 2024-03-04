@@ -5,6 +5,7 @@ const middlewareActions = {
   login: () => {},
   logout: () => {},
   getActiveUser: () => {},
+  refreshToken: () => {},
 };
 
 export const authSlice = createSlice({
@@ -31,5 +32,6 @@ export const {
   getActiveUser,
   setActiveUser,
   setToken,
+  refreshToken,
 } = authSlice.actions;
 export default authSlice.reducer;

@@ -9,6 +9,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import { getActiveUser } from "./store/auth/slice";
 import AppGalleries from "./pages/AppGalleries";
+import CreateGallery from "./pages/CreateGallery";
 
 function App() {
   const activeUser = useSelector(selectActiveUser);
@@ -35,7 +36,7 @@ function App() {
             <AppGalleries selfId={isAuthenticated ? activeUser?.id : null} />
           }
         />
-        {/* <Route path="/galleries/create" element={<CreateGallery />} /> */}
+        <Route path="/create" element={<CreateGallery />} />
         <Route path="/galleries/:id" element={<AppGalleries />} />
         {/* <Route path="/authors/:id" element={<GalleriesApp />} /> */}
         {/* <Route path="/edit-gallery/:id" element={<CreateGallery />} /> */}

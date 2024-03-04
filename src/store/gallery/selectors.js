@@ -4,3 +4,7 @@ export function selectGalleries(state) {
 export function selectGallery(state) {
   return state.galleries.gallery;
 }
+
+export function selectNewGallery(state) {
+  return state.galleries.newGallery;
+}

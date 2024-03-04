@@ -16,7 +16,7 @@ class AuthService extends HttpService {
     localStorage.removeItem("token");
   };
   getActiveUser = async () => {
-    const { data } = await this.client.get("/profile");
+    const { data } = await this.client.get("/me");
     return data;
   };
   getAuthor = async (id) => {

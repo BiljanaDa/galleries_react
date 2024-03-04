@@ -1,8 +1,12 @@
 import { galleryService } from "../../services/GalleryService";
 import {
+  addGallery,
+  deleteGallery,
+  editGallery,
   getGalleries,
   getGallery,
   setGalleries,
+  setGalleriesWithNewGallery,
   setGallery,
   setPaginated,
 } from "./slice";
@@ -30,7 +34,44 @@ function* getGalleryHandler(action) {
   }
 }
 
+function* addGalleryHandler(action) {
+  try {
+    console.log("Request Payload:", action.payload);
+    const newGallery = yield call(galleryService.add, action.payload);
+    console.log("New Gallery:", newGallery);
+    yield put(setGalleriesWithNewGallery(newGallery));
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+function* editGalleryHandler(action) {
+  try {
+    const gallery = yield call(
+      galleryService.edit,
+      action.payload.newGallery.id,
+      action.payload.newGallery
+    );
+    yield put(setGalleriesWithNewGallery(gallery));
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+function* deleteGalleryHandler(action) {
+  try {
+    yield call(galleryService.delete, action.payload);
+    const gallery = yield call(galleryService.getGallery);
+    yield put(setGalleries(gallery));
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 export function* watchForGalleries() {
   yield takeLatest(getGalleries.type, getGalleriesHandler);
   yield takeLatest(getGallery.type, getGalleryHandler);
+  yield takeLatest(addGallery.type, addGalleryHandler);
+  yield takeLatest(editGallery.type, editGalleryHandler);
+  yield takeLatest(deleteGallery.type, deleteGalleryHandler);
 }

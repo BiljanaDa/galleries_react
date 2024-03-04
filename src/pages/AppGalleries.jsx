@@ -32,7 +32,7 @@ export default function AppGalleries() {
       <Row className="justify-content-center">
         <ListGroup>
           {loadedGalleries.length ? (
-            loadedGalleries.map((gallery, index) => (
+            loadedGalleries.map((gallery) => (
               <GalleryRow key={gallery.id} gallery={gallery} />
             ))
           ) : (
