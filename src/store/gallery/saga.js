@@ -19,21 +19,19 @@ import { call, put, takeLatest } from "redux-saga/effects";
 function* getGalleriesHandler(action) {
   try {
     const { page, userId } = action.payload || {};
+    const galleries = yield call(galleryService.getAll, page, userId);
 
     if (userId !== null && userId !== "") {
-      const galleries = yield call(galleryService.getAll, page, userId);
-
       if (action.payload?.data > 1) {
         yield put(setPaginated(galleries));
       } else {
         yield put(setGalleries(galleries));
       }
     } else {
-      const galleries = yield call(galleryService.getAll, page);
       yield put(setGalleries(galleries));
     }
-  } catch (e) {
-    console.log(e);
+  } catch (error) {
+    console.error("Error fetching galleries:", error);
   }
 }
 

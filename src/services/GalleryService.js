@@ -3,7 +3,7 @@ import HttpService from "./HttpService";
 class GalleryService extends HttpService {
   getAll = async (page = 0, userId = "") => {
     let endpoint = `/galleries/?page=${page}`;
-    if (userId !== "") {
+    if (userId) {
       endpoint += `&userId=${userId}`;
     }
     try {

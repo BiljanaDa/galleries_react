@@ -14,11 +14,14 @@ export default function AppGalleries({ myId }) {
   const [pageSize] = useState(10);
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (myId) {
       dispatch(setSearchUserId(myId));
       dispatch(getGalleries({ page: 1, pageSize, userId: myId }));
+    } else {
+      dispatch(setSearchUserId(null));
+      dispatch(getGalleries({ page: 1, pageSize }));
     }
-  }, [dispatch, isAuthenticated, myId, pageSize]);
+  }, [dispatch, myId, pageSize]);
 
   function handlePagination(page) {
     const nextPage = allGalleries.current_page + 1;
