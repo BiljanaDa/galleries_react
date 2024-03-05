@@ -53,15 +53,18 @@ export default function SingleGallery() {
     setNewComment({ content: "" });
   };
 
-  const handleDeleteComment = async (id) => {
+  const handleDeleteComment = async (commentId) => {
     const response = prompt(
       "Are you sure you want to delete comment? If so, type 'yes' to delete."
     );
     if (response !== "yes") {
       return;
     }
-    dispatch(deleteComment(id));
-    navigate("/", { replace: true });
+    const currentGallery = gallery;
+    const galleryId = currentGallery.id;
+
+    dispatch(deleteComment({ commentId, galleryId }));
+    navigate(`/galleries/${galleryId}`, { replace: true });
   };
 
   return (
@@ -106,7 +109,7 @@ export default function SingleGallery() {
               gallery={gallery}
               handleDeleteComment={handleDeleteComment}
               isAuthenticated={isAuthenticated}
-              handleAddNewComment={handleAddComment}
+              handleAddComment={handleAddComment}
               newComment={newComment}
               setNewComment={setNewComment}
             />

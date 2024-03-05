@@ -40,6 +40,9 @@ export const NavBar = () => {
                 Welcome, {activeUser?.first_name} {activeUser?.last_name}!
               </span>
             </Navbar.Text>
+            <Nav.Link as={Link} to="/galleries/my-galleries">
+              My Galleries
+            </Nav.Link>
             <Button variant="outline-light" onClick={handleLogout}>
               Logout
             </Button>

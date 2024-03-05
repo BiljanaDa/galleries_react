@@ -1,18 +1,23 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { selectIsAuthenticated } from "../store/auth/selectors";
+import {
+  selectActiveUser,
+  selectIsAuthenticated,
+} from "../store/auth/selectors";
 import useFormattedDate from "../hooks/useFormattedDate";
 import { Button, Card, Container, Form } from "react-bootstrap";
 
 export const CommentComponent = ({
   gallery,
   handleDeleteComment,
-  isAuthenticated,
+
   handleAddComment,
   newComment,
-  setNewCommnt,
+  setNewComment,
 }) => {
-  const activeUser = useSelector(selectIsAuthenticated);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const activeUser = useSelector(selectActiveUser);
+
   const formattedDate = useFormattedDate(
     gallery.created_at,
     "dd-MM-yyyy HH:mm"
@@ -68,11 +73,13 @@ export const CommentComponent = ({
                   value={newComment.content}
                   placeholder="Enter comment"
                   onChange={({ target }) =>
-                    setNewCommnt({ ...newComment, content: target.value })
+                    setNewComment({ ...newComment, content: target.value })
                   }
                 />
               </Form.Group>
-              <Button type="submit">Create Comment</Button>
+              <Button type="submit" onClick={handleAddComment}>
+                Create Comment
+              </Button>
             </Form>
           </Card.Body>
         </Card>

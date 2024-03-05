@@ -18,7 +18,9 @@ export const galleriesSlice = createSlice({
       current_page: 0,
       last_page: 0,
     },
-    gallery: {},
+    gallery: {
+      comments: [],
+    },
     newGallery: {
       title: "",
       description: "",
@@ -46,13 +48,25 @@ export const galleriesSlice = createSlice({
       state.newGallery = {};
     },
     setGalleryWithComment(state, action) {
-      state.gallery = {
-        ...state.gallery,
-        comments: [...state.gallery.comments, action.payload],
+      return {
+        ...state,
+        gallery: {
+          ...state.gallery,
+          comments: [...state.gallery.comments, action.payload],
+        },
       };
     },
-    setGalleryWithoutComment(state) {
-      state.gallery = state.gallery;
+    setGalleryWithoutComment(state, action) {
+      const commentIdToRemove = action.payload;
+      state.gallery = {
+        ...state.gallery,
+        comments: state.gallery.comments.filter(
+          (comment) => comment.id !== commentIdToRemove
+        ),
+      };
+    },
+    setSearchUserId(state, action) {
+      state.userId = action.payload;
     },
     ...middlewareActions,
   },
@@ -74,5 +88,6 @@ export const {
   setGalleryWithoutComment,
   addComment,
   deleteComment,
+  setSearchUserId,
 } = galleriesSlice.actions;
 export default galleriesSlice.reducer;

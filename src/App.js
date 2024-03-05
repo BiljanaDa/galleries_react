@@ -32,9 +32,9 @@ function App() {
         <Route path="/" element={<Navigate to="/galleries" />} />
         <Route path="/galleries" element={<AppGalleries />} />
         <Route
-          path="/galleries/me"
+          path="/galleries/my-galleries"
           element={
-            <AppGalleries selfId={isAuthenticated ? activeUser?.id : null} />
+            <AppGalleries myId={isAuthenticated ? activeUser?.id : null} />
           }
         />
         <Route path="/create" element={<CreateGallery />} />

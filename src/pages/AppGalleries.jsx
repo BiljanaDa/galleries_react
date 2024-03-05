@@ -2,30 +2,44 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectIsAuthenticated } from "../store/auth/selectors";
 import { selectGalleries } from "../store/gallery/selectors";
-import { getGalleries } from "../store/gallery/slice";
+import { getGalleries, setSearchUserId } from "../store/gallery/slice";
 import GalleryRow from "../components/GalleryRow";
 import { Button, Container, ListGroup, Row } from "react-bootstrap";
 
-export default function AppGalleries() {
+export default function AppGalleries({ myId }) {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(selectIsAuthenticated);
-  const galleries = useSelector(selectGalleries);
+  const allGalleries = useSelector(selectGalleries);
   const [loadedGalleries, setLoadedGalleries] = useState([]);
   const [pageSize] = useState(10);
 
   useEffect(() => {
-    dispatch(getGalleries({ page: 1, pageSize }));
-  }, [dispatch, isAuthenticated, pageSize]);
-
-  function handlePagination() {
-    const nextPage = galleries.current_page + 1;
-    dispatch(getGalleries({ page: nextPage }));
-  }
-  useEffect(() => {
-    if (galleries.data) {
-      setLoadedGalleries(galleries.data);
+    if (isAuthenticated) {
+      dispatch(setSearchUserId(myId));
+      dispatch(getGalleries({ page: 1, pageSize, userId: myId }));
     }
-  }, [galleries.data]);
+  }, [dispatch, isAuthenticated, myId, pageSize]);
+
+  function handlePagination(page) {
+    const nextPage = allGalleries.current_page + 1;
+    dispatch(getGalleries({ page: page, userId: myId }));
+  }
+
+  useEffect(() => {
+    if (allGalleries.data) {
+      setLoadedGalleries(allGalleries.data);
+    }
+  }, [allGalleries.data]);
+
+  useEffect(() => {
+    if (isAuthenticated && myId && allGalleries.data) {
+      const myGalleriesData = allGalleries.data.filter(
+        (gallery) => gallery.user_id === myId
+      );
+
+      setLoadedGalleries(myGalleriesData);
+    }
+  }, [allGalleries.data, myId, isAuthenticated]);
 
   return (
     <Container className="mt-4">
@@ -40,15 +54,16 @@ export default function AppGalleries() {
           )}
         </ListGroup>
       </Row>
-      {galleries.current_page < galleries.last_page && (
-        <Button
-          variant="primary"
-          className="mt-3"
-          onClick={() => handlePagination()}
-        >
-          Load More
-        </Button>
-      )}
+      {allGalleries.current_page !== allGalleries.last_page &&
+        loadedGalleries.length >= pageSize && (
+          <Button
+            variant="primary"
+            className="mt-3"
+            onClick={() => handlePagination(allGalleries.current_page + 1)}
+          >
+            Load More
+          </Button>
+        )}
     </Container>
   );
 }

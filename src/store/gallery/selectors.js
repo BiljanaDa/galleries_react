@@ -8,3 +8,7 @@ export function selectGallery(state) {
 export function selectNewGallery(state) {
   return state.galleries.newGallery;
 }
+
+export function selectSearchUserId(state) {
+  return state.galleries.userId;
+}

@@ -18,10 +18,18 @@ import { call, put, takeLatest } from "redux-saga/effects";
 
 function* getGalleriesHandler(action) {
   try {
-    const galleries = yield call(galleryService.getAll, action.payload?.page);
-    if (action.payload?.data > 1) {
-      yield put(setPaginated(galleries));
+    const { page, userId } = action.payload || {};
+
+    if (userId !== null && userId !== "") {
+      const galleries = yield call(galleryService.getAll, page, userId);
+
+      if (action.payload?.data > 1) {
+        yield put(setPaginated(galleries));
+      } else {
+        yield put(setGalleries(galleries));
+      }
     } else {
+      const galleries = yield call(galleryService.getAll, page);
       yield put(setGalleries(galleries));
     }
   } catch (e) {
@@ -83,13 +91,13 @@ function* addCommentHendler(action) {
 
 function* deleteCommentHandler(action) {
   try {
-    const comment = yield call(
+    const deletedComment = yield call(
       galleryService.deleteComment,
-      action.setPaginated
+      action.payload
     );
-    yield put(setGalleryWithoutComment(comment));
+    yield put(setGalleryWithoutComment(action.payload.commentId));
   } catch (e) {
-    console.log(e);
+    console.error("Error deleting comment:", e);
   }
 }
 

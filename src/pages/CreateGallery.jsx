@@ -43,7 +43,7 @@ export default function CreateGallery() {
     } else {
       dispatch(addGallery({ ...newGallery, images: newImages }));
       dispatch(setResetForm());
-      navigate("/galleries/me");
+      navigate("/galleries/my-galleries");
     }
     dispatch(setResetForm());
   };

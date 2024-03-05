@@ -12,7 +12,7 @@ export const authSlice = createSlice({
   name: "auth",
   initialState: {
     token: localStorage.getItem("token"),
-    activeUser: null,
+    activeUser: {},
   },
   reducers: {
     setActiveUser(state, action) {

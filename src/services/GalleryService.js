@@ -1,11 +1,18 @@
 import HttpService from "./HttpService";
 
 class GalleryService extends HttpService {
-  getAll = async (page = 0) => {
+  getAll = async (page = 0, userId = "") => {
     let endpoint = `/galleries/?page=${page}`;
-
-    const { data } = await this.client.get(endpoint);
-    return data;
+    if (userId !== "") {
+      endpoint += `&userId=${userId}`;
+    }
+    try {
+      const response = await this.client.get(endpoint);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching galleries:", error);
+      throw error;
+    }
   };
 
   getById = async (id) => {
