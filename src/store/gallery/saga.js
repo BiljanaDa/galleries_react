@@ -1,6 +1,8 @@
 import { galleryService } from "../../services/GalleryService";
 import {
+  addComment,
   addGallery,
+  deleteComment,
   deleteGallery,
   editGallery,
   getGalleries,
@@ -8,6 +10,8 @@ import {
   setGalleries,
   setGalleriesWithNewGallery,
   setGallery,
+  setGalleryWithComment,
+  setGalleryWithoutComment,
   setPaginated,
 } from "./slice";
 import { call, put, takeLatest } from "redux-saga/effects";
@@ -68,10 +72,33 @@ function* deleteGalleryHandler(action) {
   }
 }
 
+function* addCommentHendler(action) {
+  try {
+    const newComment = yield call(galleryService.addComment, action.payload);
+    yield put(setGalleryWithComment(newComment));
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+function* deleteCommentHandler(action) {
+  try {
+    const comment = yield call(
+      galleryService.deleteComment,
+      action.setPaginated
+    );
+    yield put(setGalleryWithoutComment(comment));
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 export function* watchForGalleries() {
   yield takeLatest(getGalleries.type, getGalleriesHandler);
   yield takeLatest(getGallery.type, getGalleryHandler);
   yield takeLatest(addGallery.type, addGalleryHandler);
   yield takeLatest(editGallery.type, editGalleryHandler);
   yield takeLatest(deleteGallery.type, deleteGalleryHandler);
+  yield takeLatest(addComment.type, addCommentHendler);
+  yield takeLatest(deleteComment.type, deleteCommentHandler);
 }

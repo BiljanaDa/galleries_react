@@ -36,7 +36,7 @@ export default function GalleryRow({ gallery }) {
           By:{" "}
           {gallery.user ? (
             <Link to={`/authors/${gallery.user.id}`}>
-              {gallery.user.first_name} {gallery.user.last_name}
+              {gallery?.user?.first_name} {gallery?.user?.last_name}
             </Link>
           ) : (
             "Unknown User"
