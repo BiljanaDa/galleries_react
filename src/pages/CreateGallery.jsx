@@ -87,10 +87,24 @@ export default function CreateGallery() {
     if (id) {
       navigate(`/galleries/${gallery.id}`);
     } else {
-      navigate("/galleries/me");
+      navigate("/galleries/my-galleries");
+    }
+  };
+  const handleMoveUpClick = (index) => {
+    if (index > 0) {
+      const list = [...newImages];
+      [list[index], list[index - 1]] = [list[index - 1], list[index]];
+      setNewImages(list);
     }
   };
 
+  const handleMoveDownClick = (index) => {
+    if (index < newImages.length - 1) {
+      const list = [...newImages];
+      [list[index], list[index + 1]] = [list[index + 1], list[index]];
+      setNewImages(list);
+    }
+  };
   useEffect(() => {
     if (id) {
       handleSingleGallery(id);
@@ -146,6 +160,33 @@ export default function CreateGallery() {
                   Please enter a valid image URL ending with .png, .jpg, or
                   .jpeg.
                 </Form.Control.Feedback>
+              </Col>
+              <Col xs="auto">
+                {newImages.length !== 1 && (
+                  <Button variant="danger" onClick={() => handleRemoveClick(i)}>
+                    Remove
+                  </Button>
+                )}
+              </Col>
+              <Col xs="auto">
+                {i > 0 && (
+                  <Button
+                    variant="secondary"
+                    onClick={() => handleMoveUpClick(i)}
+                  >
+                    Move Up
+                  </Button>
+                )}
+              </Col>
+              <Col xs="auto">
+                {i < newImages.length - 1 && (
+                  <Button
+                    variant="secondary"
+                    onClick={() => handleMoveDownClick(i)}
+                  >
+                    Move Down
+                  </Button>
+                )}
               </Col>
               {newImages.length - 1 === i && (
                 <Col xs="auto">
