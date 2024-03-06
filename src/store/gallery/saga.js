@@ -7,12 +7,14 @@ import {
   editGallery,
   getGalleries,
   getGallery,
+  loadMoreGalleries,
   setGalleries,
   setGalleriesWithNewGallery,
   setGallery,
   setGalleryWithComment,
   setGalleryWithoutComment,
   setPaginated,
+  updateGalleries,
 } from "./slice";
 import { call, put, takeLatest } from "redux-saga/effects";
 
@@ -32,6 +34,16 @@ function* getGalleriesHandler(action) {
     }
   } catch (error) {
     console.error("Error fetching galleries:", error);
+  }
+}
+
+function* loadMoreGalleriesHandler(action) {
+  try {
+    const { page, userId, term } = action.payload || {};
+    const galleries = yield call(galleryService.getAll, page, userId, term);
+    yield put(updateGalleries(galleries));
+  } catch (e) {
+    console.error('Error while loading more galleries.. ', e)
   }
 }
 
@@ -107,4 +119,5 @@ export function* watchForGalleries() {
   yield takeLatest(deleteGallery.type, deleteGalleryHandler);
   yield takeLatest(addComment.type, addCommentHendler);
   yield takeLatest(deleteComment.type, deleteCommentHandler);
+  yield takeLatest(loadMoreGalleries.type, loadMoreGalleriesHandler);
 }

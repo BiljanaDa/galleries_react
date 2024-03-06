@@ -8,6 +8,7 @@ import {
 } from "../store/gallery/selectors";
 import {
   getGalleries,
+  loadMoreGalleries,
   setSearchTerm,
   setSearchUserId,
 } from "../store/gallery/slice";
@@ -24,6 +25,7 @@ export default function AppGalleries({ myId }) {
   const term = useSelector(selectSearchTerm);
   const { id } = useParams();
   const navigate = useNavigate();
+
   useEffect(() => {
     const handleRouteChange = () => {
       dispatch(setSearchUserId(null));
@@ -51,15 +53,21 @@ export default function AppGalleries({ myId }) {
     }
   }, [myId, id, dispatch, pageSize]);
 
+
   function handlePagination(page) {
+
+    // const userId = myId || id || null;
+
+    // dispatch(loadMoreGalleries({ page: page, term: term, userId: userId }))
+
     if (myId) {
-      dispatch(getGalleries({ page: page, term: term, userId: myId }));
+      dispatch(loadMoreGalleries({ page: page, term: term, userId: myId }));
     }
     if (id) {
-      dispatch(getGalleries({ page: page, term: term, userId: id }));
+      dispatch(loadMoreGalleries({ page: page, term: term, userId: id }));
     }
     if (!id && !myId) {
-      dispatch(getGalleries({ page: page, term: term, userId: null }));
+      dispatch(loadMoreGalleries({ page: page, term: term, userId: null }));
     }
   }
 

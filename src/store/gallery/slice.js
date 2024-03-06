@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const middlewareActions = {
   getGalleries: () => {},
+  loadMoreGalleries: () => {},
   getGallery: () => {},
   addGallery: () => {},
   editGallery: () => {},
@@ -28,8 +29,16 @@ export const galleriesSlice = createSlice({
     },
   },
   reducers: {
+
     setGalleries(state, action) {
       state.page = action.payload;
+    },
+
+    updateGalleries(state, action) {
+      state.page = {
+        ...action.payload,
+        data: [...state.page.data, ...action.payload.data]
+      };
     },
     setGallery(state, action) {
       state.gallery = action.payload;
@@ -97,5 +106,7 @@ export const {
   deleteComment,
   setSearchUserId,
   setSearchTerm,
+  loadMoreGalleries,
+  updateGalleries
 } = galleriesSlice.actions;
 export default galleriesSlice.reducer;
