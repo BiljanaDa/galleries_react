@@ -1,21 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Form, Button, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { selectSearchTerm } from "../store/gallery/selectors";
+import {
+  selectSearchTerm,
+  selectSearchUserId,
+} from "../store/gallery/selectors";
 import { getGalleries, setSearchTerm } from "../store/gallery/slice";
 
 export function SearchComponent() {
   const term = useSelector(selectSearchTerm);
   const dispatch = useDispatch();
+  const userId = useSelector(selectSearchUserId);
+
+  useEffect(() => {
+    if (!term) {
+      dispatch(getGalleries({ page: 1, term: "" }));
+    }
+  }, [term, dispatch]);
 
   function handleChangeSearchTerm(event) {
-    const searchTerm = event.target.value;
-    dispatch(setSearchTerm(searchTerm));
+    dispatch(setSearchTerm(event.target.value));
+  }
 
-    // Dodajte uvjet za pokretanje pretrage samo ako je unos teksta dovoljno dug
-    if (searchTerm.length >= 3 || searchTerm.length === 0) {
-      dispatch(getGalleries({ page: 1, term: searchTerm }));
-    }
+  function handleSearch() {
+    dispatch(getGalleries({ page: 1, term: term, userId: userId }));
   }
 
   return (
@@ -29,6 +37,9 @@ export function SearchComponent() {
           placeholder="Input search term here"
           className="mr-sm-2"
         />
+        <Button variant="outline-primary" onClick={handleSearch}>
+          Search
+        </Button>
       </Col>
     </div>
   );

@@ -16,3 +16,7 @@ export function selectSearchUserId(state) {
 export function selectSearchTerm(state) {
   return state.galleries.term;
 }
+
+export function selectPaginations(state) {
+  return state.galleries.pagination;
+}

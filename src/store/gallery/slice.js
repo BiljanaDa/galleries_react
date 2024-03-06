@@ -38,6 +38,9 @@ export const galleriesSlice = createSlice({
       state.page.data = [...state.page.data, ...action.payload.data];
       state.page.current_page = action.payload.current_page;
     },
+    setCurrentPage: (state, action) => {
+      state.current_page = action.payload;
+    },
     setNewGallery(state, action) {
       state.newGallery = action.payload;
     },
@@ -69,6 +72,7 @@ export const galleriesSlice = createSlice({
       state.userId = action.payload;
     },
     setSearchTerm(state, action) {
+      console.log("New term:", action.payload);
       state.term = action.payload;
     },
     ...middlewareActions,
@@ -79,6 +83,7 @@ export const {
   setGalleries,
   setGallery,
   setPaginated,
+  setCurrentPage,
   getGalleries,
   getGallery,
   setGalleriesWithNewGallery,
