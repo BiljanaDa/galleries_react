@@ -72,7 +72,6 @@ export const galleriesSlice = createSlice({
       state.userId = action.payload;
     },
     setSearchTerm(state, action) {
-      console.log("New term:", action.payload);
       state.term = action.payload;
     },
     ...middlewareActions,

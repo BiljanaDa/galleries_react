@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { selectGallery } from "../store/gallery/selectors";
 import {
   selectActiveUser,
@@ -87,7 +87,10 @@ export default function SingleGallery() {
       )}
       <h1>{gallery.title}</h1>
       <h4>
-        By: {gallery?.user?.first_name} {gallery?.user?.last_name}
+        By:{" "}
+        <Link to={`/authors/${gallery?.user?.id}`}>
+          {gallery?.user?.first_name} {gallery?.user?.last_name}
+        </Link>
       </h4>
       <div>
         {formattedDate === "unknown" ? (
