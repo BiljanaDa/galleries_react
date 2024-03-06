@@ -27,6 +27,17 @@ export default function CreateGallery() {
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
+    let isValid = true;
+    newImages.forEach((image) => {
+      if (!isValidImageUrl(image.url)) {
+        isValid = false;
+      }
+    });
+
+    if (!isValid) {
+      setValidated(true);
+      return;
+    }
     if (id) {
       dispatch(
         editGallery({
@@ -129,14 +140,12 @@ export default function CreateGallery() {
                   placeholder="Image URL"
                   value={x.url}
                   onChange={(e) => handleInputChange(e, i)}
+                  isInvalid={!isValidImageUrl(x.url)}
                 />
-              </Col>
-              <Col xs="auto">
-                {newImages.length !== 1 && (
-                  <Button variant="danger" onClick={() => handleRemoveClick(i)}>
-                    Remove
-                  </Button>
-                )}
+                <Form.Control.Feedback type="invalid">
+                  Please enter a valid image URL ending with .png, .jpg, or
+                  .jpeg.
+                </Form.Control.Feedback>
               </Col>
               {newImages.length - 1 === i && (
                 <Col xs="auto">
