@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectIsAuthenticated } from "../store/auth/selectors";
-import { selectGalleries } from "../store/gallery/selectors";
+import { selectGalleries, selectSearchTerm } from "../store/gallery/selectors";
 import { getGalleries, setSearchUserId } from "../store/gallery/slice";
 import GalleryRow from "../components/GalleryRow";
 import { Button, Container, ListGroup, Row } from "react-bootstrap";
+import { useParams } from "react-router-dom";
+import { SearchComponent } from "../components/SearchComponent";
 
 export default function AppGalleries({ myId }) {
   const dispatch = useDispatch();
@@ -12,6 +14,7 @@ export default function AppGalleries({ myId }) {
   const allGalleries = useSelector(selectGalleries);
   const [loadedGalleries, setLoadedGalleries] = useState([]);
   const [pageSize] = useState(10);
+  const term = useSelector(selectSearchTerm);
 
   useEffect(() => {
     if (myId) {
@@ -25,7 +28,7 @@ export default function AppGalleries({ myId }) {
 
   function handlePagination(page) {
     const nextPage = allGalleries.current_page + 1;
-    dispatch(getGalleries({ page: page, userId: myId }));
+    dispatch(getGalleries({ page: page, userId: myId, term: term }));
   }
 
   useEffect(() => {
@@ -47,6 +50,7 @@ export default function AppGalleries({ myId }) {
   return (
     <Container className="mt-4">
       <Row className="justify-content-center">
+        <SearchComponent />
         <ListGroup>
           {loadedGalleries.length ? (
             loadedGalleries.map((gallery) => (

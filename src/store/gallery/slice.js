@@ -68,6 +68,9 @@ export const galleriesSlice = createSlice({
     setSearchUserId(state, action) {
       state.userId = action.payload;
     },
+    setSearchTerm(state, action) {
+      state.term = action.payload;
+    },
     ...middlewareActions,
   },
 });
@@ -89,5 +92,6 @@ export const {
   addComment,
   deleteComment,
   setSearchUserId,
+  setSearchTerm,
 } = galleriesSlice.actions;
 export default galleriesSlice.reducer;

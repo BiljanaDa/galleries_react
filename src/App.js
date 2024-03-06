@@ -40,6 +40,7 @@ function App() {
         <Route path="/create" element={<CreateGallery />} />
         <Route path="/galleries/:id" element={<SingleGallery />} />
         <Route path="/edit-gallery/:id" element={<CreateGallery />} />
+        <Route path="/authors/:id" element={<AppGalleries />} />
       </Routes>
     </div>
   );

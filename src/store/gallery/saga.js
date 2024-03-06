@@ -18,8 +18,8 @@ import { call, put, takeLatest } from "redux-saga/effects";
 
 function* getGalleriesHandler(action) {
   try {
-    const { page, userId } = action.payload || {};
-    const galleries = yield call(galleryService.getAll, page, userId);
+    const { page, userId, term } = action.payload || {};
+    const galleries = yield call(galleryService.getAll, page, userId, term);
 
     if (userId !== null && userId !== "") {
       if (action.payload?.data > 1) {

@@ -12,3 +12,7 @@ export function selectNewGallery(state) {
 export function selectSearchUserId(state) {
   return state.galleries.userId;
 }
+
+export function selectSearchTerm(state) {
+  return state.galleries.term;
+}
